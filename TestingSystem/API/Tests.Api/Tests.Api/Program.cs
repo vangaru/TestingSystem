@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using Tests.Api.Implementations;
 using Tests.Api.Interfaces;
 using Tests.Domain.Data;
+using Tests.Domain.Implementations;
+using Tests.Domain.Interfaces;
 using Tests.Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +48,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ITokenProvider, TokenProvider>();
+builder.Services.AddTransient<IQuestionRepository, QuestionRepository>();
+builder.Services.AddTransient<IQuestionAnswerRepository, QuestionAnswerRepository>();
+builder.Services.AddTransient<ITestRepository, TestRepository>();
+builder.Services.AddTransient<ITestResultRepository, TestResultRepository>();
 
 var app = builder.Build();
 
