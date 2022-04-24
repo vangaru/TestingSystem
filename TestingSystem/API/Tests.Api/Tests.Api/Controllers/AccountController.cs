@@ -1,14 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using Tests.Api.Interfaces;
 using Tests.Api.Models;
 using Tests.Domain.Models;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace Tests.Api.Controllers;
 
@@ -16,24 +13,18 @@ namespace Tests.Api.Controllers;
 [Route("[controller]")]
 public class AccountController : ControllerBase
 {
-    private const string ValidIssuerParameter = "JWT:ValidIssuer";
-    private const string ValidAudienceParameter = "JWT:ValidAudience";
-    private const string SecretParameter = "JWT:Secret";
-    private const string TokenValidityInMinutesParameter = "JWT:TokenValidityInMinutes";
-    private const string RefreshTokenValidityInDaysParameter = "JWT:RefreshTokenValidityInDays";
-
     private readonly UserManager<TestsUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly IConfiguration _configuration;
+    private readonly ITokenProvider _tokenProvider;
     
     public AccountController(
         UserManager<TestsUser> userManager, 
-        RoleManager<IdentityRole> roleManager, 
-        IConfiguration configuration)
+        RoleManager<IdentityRole> roleManager,
+        ITokenProvider tokenProvider)
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _configuration = configuration;
+        _tokenProvider = tokenProvider;
     }
 
     [HttpPost]
@@ -61,10 +52,10 @@ public class AccountController : ControllerBase
             authClaims.Add(authClaim);
         }
 
-        JwtSecurityToken jwtToken = CreateToken(authClaims);
-        string refreshToken = GenerateRefreshToken();
+        JwtSecurityToken jwtToken = _tokenProvider.CreateToken(authClaims);
+        string refreshToken = _tokenProvider.GenerateRefreshToken();
 
-        _ = int.TryParse(_configuration[RefreshTokenValidityInDaysParameter], out int refreshTokenValidityInDays);
+        int refreshTokenValidityInDays = _tokenProvider.GetRefreshTokenValidityInDays();
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
@@ -116,6 +107,8 @@ public class AccountController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, registerFailedResponse);
         }
 
+        await AddToRole(user, registerModel.UserRole!);
+
         var successResponse = new Response {Status = "Success", Message = "User created successfully!"};
         return Ok(successResponse);
     }
@@ -127,7 +120,7 @@ public class AccountController : ControllerBase
         string? accessToken = token.AccessToken;
         string? refreshToken = token.RefreshToken;
 
-        ClaimsPrincipal? principal = GetPrincipalFromExpiredToken(accessToken);
+        ClaimsPrincipal? principal = _tokenProvider.GetPrincipalFromExpiredToken(accessToken);
 
         if (principal == null)
         {
@@ -147,8 +140,8 @@ public class AccountController : ControllerBase
             return BadRequest("Invalid access token or refresh token");
         }
 
-        JwtSecurityToken newAccessToken = CreateToken(principal.Claims.ToList());
-        string newRefreshToken = GenerateRefreshToken();
+        JwtSecurityToken newAccessToken = _tokenProvider.CreateToken(principal.Claims.ToList());
+        string newRefreshToken = _tokenProvider.GenerateRefreshToken();
 
         user.RefreshToken = newRefreshToken;
         await _userManager.UpdateAsync(user);
@@ -191,6 +184,21 @@ public class AccountController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet]
+    [Route("{userName}/in-role")]
+    public async Task<IActionResult> IsInRole(string userName, [FromBody]string role)
+    {
+        TestsUser user = await _userManager.FindByNameAsync(userName);
+        if (user == null)
+        {
+            return BadRequest("Invalid user name");
+        }
+        
+        IList<string> userRoles = await _userManager.GetRolesAsync(user);
+        bool isInRole = userRoles.Contains(role);
+        return Ok(isInRole);
+    }
  
     #region Helpers
 
@@ -216,69 +224,15 @@ public class AccountController : ControllerBase
         return authClaims;
     }
 
-    private JwtSecurityToken CreateToken(List<Claim> authClaims)
+    private async Task AddToRole(TestsUser user, string userRole)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[SecretParameter]));
-        var signingCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
-        _ = int.TryParse(_configuration[TokenValidityInMinutesParameter], out int tokenValidityInMinutes);
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration[ValidIssuerParameter],
-            audience: _configuration[ValidAudienceParameter],
-            expires: DateTime.Now.AddMinutes(tokenValidityInMinutes),
-            claims: authClaims,
-            signingCredentials: signingCredentials
-        );
-
-        return token;
-    }
-
-    private static string GenerateRefreshToken()
-    {
-        var randomNumber = new byte[64];
-        using var randomNumberGenerator = RandomNumberGenerator.Create();
-        randomNumberGenerator.GetBytes(randomNumber);
-        string refreshToken = Convert.ToBase64String(randomNumber);
-        return refreshToken;
-    }
-
-    private async Task AddToRole(TestsUser user, UserRoles userRole)
-    {
-        if (!await _roleManager.RoleExistsAsync(userRole.ToString()))
+        if (!await _roleManager.RoleExistsAsync(userRole))
         {
-            var role = new IdentityRole(userRole.ToString());
+            var role = new IdentityRole(userRole);
             await _roleManager.CreateAsync(role);
         }
-
-        await _userManager.AddToRoleAsync(user, userRole.ToString());
-    }
-
-    private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
-    {
-        var tokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateAudience = false,
-            ValidateIssuer = false,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[SecretParameter])),
-            ValidateLifetime = false
-        };
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-        if (!TokenValid(securityToken))
-        {
-            throw new SecurityTokenException("Invalid token");
-        }
-
-        return principal;
-    }
-
-    private bool TokenValid(SecurityToken securityToken)
-    {
-        return !(securityToken is not JwtSecurityToken jwtSecurityToken ||
-                 !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
-                     StringComparison.InvariantCultureIgnoreCase));
+        
+        await _userManager.AddToRoleAsync(user, userRole);
     }
 
     #endregion

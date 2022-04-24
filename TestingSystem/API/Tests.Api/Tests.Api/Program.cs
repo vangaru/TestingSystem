@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Tests.Api.Implementations;
+using Tests.Api.Interfaces;
 using Tests.Domain.Data;
 using Tests.Domain.Models;
 
@@ -43,6 +45,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<ITokenProvider, TokenProvider>();
 
 var app = builder.Build();
 
