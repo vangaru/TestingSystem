@@ -4,7 +4,7 @@ import {componentsList} from "./components-list";
 
 @NgModule({
   declarations: [
-    ...componentsList
+    ...componentsList,
   ],
   imports: [
     CommonModule
