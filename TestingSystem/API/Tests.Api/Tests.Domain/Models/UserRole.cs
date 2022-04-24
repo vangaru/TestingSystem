@@ -1,6 +1,6 @@
 ﻿namespace Tests.Domain.Models;
 
-public enum UserRoles
+public enum UserRole
 {
     Admin,
     Teacher,
