@@ -199,6 +199,27 @@ public class AccountController : ControllerBase
         bool isInRole = userRoles.Contains(role);
         return Ok(isInRole);
     }
+
+    [HttpGet]
+    public IActionResult GetUsers()
+    {
+        IQueryable<TestsUser> users = _userManager.Users;
+        
+        if (users == null)
+        {
+            return BadRequest("Failed to get users");
+        }
+
+        IEnumerable<UserViewModel> viewUsers = users.Select(u => new UserViewModel
+        {
+            Id = u.Id,
+            Email = u.Email,
+            UserName = u.UserName,
+            Role = _userManager.GetRolesAsync(u).Result.Count > 0 ? _userManager.GetRolesAsync(u).Result[0] : ""
+        });
+
+        return Ok(viewUsers);
+    }
  
     #region Helpers
 
