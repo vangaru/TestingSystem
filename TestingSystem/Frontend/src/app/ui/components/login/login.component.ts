@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../core/services/auth.service";
-import {AccountService} from "../../../core/services/account.service";
 import {UserRoles} from "../../../core/models/user-roles";
 import {Router} from "@angular/router";
 
@@ -19,8 +18,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router,
-    private accountService: AccountService) { }
+    private router: Router) { }
 
   ngOnInit(): void {
     this.loginFormGroup = this.formBuilder.group({
@@ -45,19 +43,19 @@ export class LoginComponent implements OnInit {
     this.authService.login(userName, password).subscribe(token => {
       this.authService.saveUserInfo(token, userName);
 
-      this.accountService.userInRole(UserRoles.Student).subscribe(isStudent => {
+      this.authService.userInRole(UserRoles.Student).subscribe(isStudent => {
         if (isStudent) {
           this.router.navigate(['/student']);
         }
       });
 
-      this.accountService.userInRole(UserRoles.Teacher).subscribe(isTeacher => {
+      this.authService.userInRole(UserRoles.Teacher).subscribe(isTeacher => {
         if (isTeacher) {
           this.router.navigate(['/teacher']);
         }
       });
 
-      this.accountService.userInRole(UserRoles.Admin).subscribe(isAdmin=> {
+      this.authService.userInRole(UserRoles.Admin).subscribe(isAdmin=> {
         if (isAdmin) {
           this.router.navigate(['/admin']);
         }

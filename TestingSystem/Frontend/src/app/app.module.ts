@@ -6,6 +6,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { UiModule } from './ui/ui.module';
 import {AppConfigService} from "./core/configuration/app-config.service";
 import {HttpClientModule} from "@angular/common/http";
+import {AdminGuard} from "./core/guards/admin.guard";
+import {StudentGuard} from "./core/guards/student.guard";
+import {TeacherGuard} from "./core/guards/teacher.guard";
 
 @NgModule({
   declarations: [
@@ -17,7 +20,7 @@ import {HttpClientModule} from "@angular/common/http";
     UiModule,
     HttpClientModule
   ],
-  providers: [
+  providers: [AdminGuard, StudentGuard, TeacherGuard,
     {
       provide: APP_INITIALIZER,
       deps: [AppConfigService],

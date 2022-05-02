@@ -12,14 +12,4 @@ export class AccountService {
   private inRoleUrl: string = "in-role"
 
   constructor(private httpClient: HttpClient, private config: AppConfigService, private authService: AuthService) { }
-
-  public userInRole(role: string): Observable<boolean> {
-    const userName: string | null = this.authService.getUserName();
-
-    if (userName === null) {
-      throw Error("Username cannot be null");
-    }
-
-    return this.httpClient.get<boolean>(`${this.config.apiBaseUrl}/${this.accountUrl}/${userName}/${this.inRoleUrl}/${role}`);
-  }
 }

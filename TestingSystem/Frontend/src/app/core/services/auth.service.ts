@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {AppConfigService} from "../configuration/app-config.service";
 import {Observable} from "rxjs";
 import {Token} from "../models/token";
+import {UserRoles} from "../models/user-roles";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AuthService {
   private tokenKey: string = "token";
   private refreshTokenKey: string = "refreshToken";
   private userNameKey: string = "userName";
+  private inRoleUrl: string = "in-role"
 
   constructor(private httpClient: HttpClient, private router: Router, private config: AppConfigService) { }
 
@@ -56,5 +58,27 @@ export class AuthService {
     localStorage.removeItem(this.refreshTokenKey);
     localStorage.removeItem(this.userNameKey);
     this.router.navigate(['/login']);
+  }
+
+  public userInRole(role: string): Observable<boolean> {
+    const userName: string | null = this.getUserName();
+
+    if (userName === null) {
+      throw Error("Username cannot be null");
+    }
+
+    return this.httpClient.get<boolean>(`${this.config.apiBaseUrl}/${this.accountUrl}/${userName}/${this.inRoleUrl}/${role}`);
+  }
+
+  public isAdmin(): Promise<boolean> {
+    return this.userInRole(UserRoles.Admin).toPromise();
+  }
+
+  public isStudent(): Promise<boolean> {
+    return this.userInRole(UserRoles.Student).toPromise();
+  }
+
+  public isTeacher(): Promise<boolean> {
+    return this.userInRole(UserRoles.Teacher).toPromise();
   }
 }
