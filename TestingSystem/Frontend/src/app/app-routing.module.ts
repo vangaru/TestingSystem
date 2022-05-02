@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
-import {UsersListComponent} from "./ui/components";
+import {RegisterUserComponent, UsersListComponent} from "./ui/components";
 import {AssignedTestsListComponent} from "./ui/components";
 import {OwnedTestsListComponent} from "./ui/components";
 import {LoginComponent} from "./ui/components";
@@ -13,6 +13,7 @@ export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'admin', redirectTo: '/admin/users', pathMatch: 'full' },
   { path: 'admin/users', component: UsersListComponent, canActivate: [AdminGuard] },
+  { path: 'admin/users/register', component: RegisterUserComponent, canActivate: [AdminGuard] },
   { path: 'student', redirectTo: '/student/tests', pathMatch: 'full' },
   { path: 'student/tests', component: AssignedTestsListComponent, canActivate: [StudentGuard] },
   { path: 'teacher', redirectTo: '/teacher/tests', pathMatch: 'full' },

@@ -5,6 +5,7 @@ import {AppConfigService} from "../configuration/app-config.service";
 import {Observable} from "rxjs";
 import {Token} from "../models/token";
 import {UserRoles} from "../models/user-roles";
+import {RegisterModel} from "../models/register-model";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import {UserRoles} from "../models/user-roles";
 export class AuthService {
   private accountUrl: string = "account";
   private loginUrl: string = "login";
+  private registerUrl: string = "register";
 
   private tokenKey: string = "token";
   private refreshTokenKey: string = "refreshToken";
@@ -20,6 +22,14 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient, private router: Router, private config: AppConfigService) { }
 
+  public register(registerModel: RegisterModel): Observable<any> {
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    const requestBody = JSON.stringify(registerModel);
+
+    return this.httpClient
+      .post(`${this.config.apiBaseUrl}/${this.accountUrl}/${this.registerUrl}`, requestBody, {headers: headers});
+  }
+
   public login(userName: string, password: string): Observable<Token> {
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
     const requestBody = JSON.stringify({
@@ -27,8 +37,8 @@ export class AuthService {
       'password': password
     });
 
-    return this.httpClient.post<Token>
-    (`${this.config.apiBaseUrl}/${this.accountUrl}/${this.loginUrl}`, requestBody, {headers: headers});
+    return this.httpClient
+      .post<Token>(`${this.config.apiBaseUrl}/${this.accountUrl}/${this.loginUrl}`, requestBody, {headers: headers});
   }
 
   public saveUserInfo(token: Token, userName: string) {

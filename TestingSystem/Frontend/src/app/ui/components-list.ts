@@ -4,5 +4,6 @@ export const componentsList = [
   TestsComponents.OwnedTestsListComponent,
   TestsComponents.AssignedTestsListComponent,
   TestsComponents.UsersListComponent,
-  TestsComponents.LoginComponent
+  TestsComponents.LoginComponent,
+  TestsComponents.RegisterUserComponent
 ];
