@@ -1,13 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {componentsList} from "./components-list";
+import {InputTextModule} from "primeng/inputtext";
+import {ButtonModule} from "primeng/button";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
-    ...componentsList,
+    ...componentsList
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    InputTextModule,
+    ButtonModule,
+    ReactiveFormsModule
   ],
   exports: [
   ]
