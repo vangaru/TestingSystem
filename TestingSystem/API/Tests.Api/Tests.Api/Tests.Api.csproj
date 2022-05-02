@@ -16,11 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Implementations" />
-      <Folder Include="Interfaces" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Tests.Application\Tests.Application.csproj" />
       <ProjectReference Include="..\Tests.Common\Tests.Common.csproj" />
       <ProjectReference Include="..\Tests.Domain\Tests.Domain.csproj" />

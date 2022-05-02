@@ -186,8 +186,8 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{userName}/in-role")]
-    public async Task<IActionResult> IsInRole(string userName, [FromBody]string role)
+    [Route("{userName}/in-role/{role}")]
+    public async Task<IActionResult> IsInRole(string userName, string role)
     {
         TestsUser user = await _userManager.FindByNameAsync(userName);
         if (user == null)
