@@ -8,26 +8,37 @@ namespace Tests.Application.Implementations;
 public class TestsService : ITestsService
 {
     private readonly ITestsRepository _testsRepository;
+    private readonly IQuestionsService _questionService;
     private readonly UserManager<TestsUser> _userManager;
 
-    public TestsService(ITestsRepository testsRepository, UserManager<TestsUser> userManager)
+    public TestsService(
+        ITestsRepository testsRepository, 
+        UserManager<TestsUser> userManager, 
+        IQuestionsService questionService)
     {
         _testsRepository = testsRepository;
         _userManager = userManager;
+        _questionService = questionService;
     }
 
-    public async Task Add(Test test, string creatorName, IEnumerable<string> assignedStudentNames)
+    public async Task Add(IEnumerable<string> expectedAnswers, string creatorName, IEnumerable<string> assignedStudentNames)
     {
         string testId = Guid.NewGuid().ToString();
         TestsUser creator = await GetTestCreator(creatorName);
         List<TestsUser> assignedStudents = await GetAssignedStudents(assignedStudentNames);
 
-        test.Id = testId;
-        test.CreatorId = creator.Id;
-        test.Creator = creator;
-        test.AssignedStudents = assignedStudents;
-        test.TestResults = new List<TestResult>();
-        
+        var test = new Test
+        {
+            Id = testId,
+            AssignedStudents = assignedStudents,
+            CreatorId = creator.Id,
+            Creator = creator,
+            TestResults = new List<TestResult>()
+        };
+
+        List<Question> assignedQuestions = _questionService.GetQuestionsForTest(test, expectedAnswers).ToList();
+        test.Questions = assignedQuestions;
+
         _testsRepository.Add(test);
     }
 

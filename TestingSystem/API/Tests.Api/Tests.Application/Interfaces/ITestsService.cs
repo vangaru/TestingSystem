@@ -4,5 +4,5 @@ namespace Tests.Application.Interfaces;
 
 public interface ITestsService
 {
-    public Task Add(Test test, string creatorName, IEnumerable<string> assignedStudentNames);
+    public Task Add(IEnumerable<string> expectedAnswers, string creatorName, IEnumerable<string> assignedStudentNames);
 }

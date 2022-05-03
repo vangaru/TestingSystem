@@ -17,7 +17,6 @@ public class TestsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "teacher")]
     public IActionResult AddTest([FromBody] CreateTestModel testModel)
     {
         if (!ModelState.IsValid)
@@ -25,7 +24,7 @@ public class TestsController : ControllerBase
             return BadRequest(ModelState);
         }
         
-        _testsService.Add(testModel.Test!, testModel.CreatorName!, testModel.AssignedStudentNames!);
+        _testsService.Add(testModel.ExpectedAnswers!, testModel.CreatorName!, testModel.AssignedStudentNames!);
         var successResponse = new Response {Status = "Success", Message = "Test created successfully"};
         return Ok(successResponse);
     }

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Tests.Domain.Models;
 
 namespace Tests.Api.Models;
 
@@ -12,5 +11,5 @@ public class CreateTestModel
     public IEnumerable<string>? AssignedStudentNames { get; set; }
     
     [Required]
-    public Test? Test { get; set; }
+    public IEnumerable<string>? ExpectedAnswers { get; set; }
 }
