@@ -1,0 +1,38 @@
+<div class="grid">
+  <div class="col-12">
+    <button pButton type="button" icon="pi pi-arrow-left" label="Go back" pTooltip="Conversion jobs"
+            class="p-button-link" [routerLink]="['/teacher']">
+    </button>
+  </div>
+</div>
+
+<div class="p-card m-5 p-5">
+  <h1>
+    Create new test!
+  </h1>
+
+  <form>
+    <div class="grid">
+      <div class="col-12">
+        <p-fieldset legend="Test name and assigned students" [toggleable]="true">
+          <div class="grid p-fluid">
+            <div class="col-6">
+              <div class="p-inputgroup">
+              <span class="p-float-label">
+                <input pInputText id="testName" name="testName" />
+                <label for="testName">Test name</label>
+              </span>
+              </div>
+            </div>
+            <div class="col-6">
+              <span class="p-float-label">
+                <p-multiSelect [options]="studentNames" display="chip" id="assignedStudents" name="assignedStudents"></p-multiSelect>
+                <label for="assignedStudents">Assigned students</label>
+              </span>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+    </div>
+  </form>
+</div>

@@ -10,6 +10,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {TooltipModule} from "primeng/tooltip";
 import {RouterModule} from "@angular/router";
 import {TableModule} from "primeng/table";
+import {FieldsetModule} from "primeng/fieldset";
+import {MultiSelectModule} from "primeng/multiselect";
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import {TableModule} from "primeng/table";
     TooltipModule,
     RouterModule,
     TableModule,
-    FormsModule
+    FormsModule,
+    FieldsetModule,
+    MultiSelectModule
   ],
   exports: [
   ]

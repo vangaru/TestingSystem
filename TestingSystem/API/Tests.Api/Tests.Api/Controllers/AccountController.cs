@@ -16,15 +16,18 @@ public class AccountController : ControllerBase
     private readonly UserManager<TestsUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ITokenProvider _tokenProvider;
+    private readonly IUsersInfoProvider _usersInfoProvider;
     
     public AccountController(
         UserManager<TestsUser> userManager, 
         RoleManager<IdentityRole> roleManager,
-        ITokenProvider tokenProvider)
+        ITokenProvider tokenProvider,
+        IUsersInfoProvider usersInfoProvider)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _tokenProvider = tokenProvider;
+        _usersInfoProvider = usersInfoProvider;
     }
 
     [HttpPost]
@@ -221,6 +224,15 @@ public class AccountController : ControllerBase
         });
 
         return Ok(viewUsers);
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "teacher")]
+    [Route("students")]
+    public async Task<IActionResult> GetStudentNames()
+    {
+        IEnumerable<string> studentNames = await _usersInfoProvider.GetStudentNames();
+        return Ok(studentNames);
     }
 
     [HttpDelete]

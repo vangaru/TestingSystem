@@ -9,6 +9,7 @@ import {User} from "../models/user";
 })
 export class AccountService {
   private accountUrl: string = "account";
+  private studentsUrl: string = "students";
 
   constructor(private httpClient: HttpClient, private config: AppConfigService) { }
 
@@ -18,5 +19,9 @@ export class AccountService {
 
   public deleteUser(id: string): Observable<any> {
     return this.httpClient.delete(`${this.config.apiBaseUrl}/${this.accountUrl}/${id}`);
+  }
+
+  public getStudentNames(): Observable<string> {
+    return this.httpClient.get<string>(`${this.config.apiBaseUrl}/${this.accountUrl}/${this.studentsUrl}`);
   }
 }
