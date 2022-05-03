@@ -15,4 +15,8 @@ export class AccountService {
   public getUsers(): Observable<User[]> {
     return this.httpClient.get<User[]>(`${this.config.apiBaseUrl}/${this.accountUrl}`);
   }
+
+  public deleteUser(id: string): Observable<any> {
+    return this.httpClient.delete(`${this.config.apiBaseUrl}/${this.accountUrl}/${id}`);
+  }
 }

@@ -220,7 +220,27 @@ public class AccountController : ControllerBase
 
         return Ok(viewUsers);
     }
- 
+
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        TestsUser userToDelete = await _userManager.FindByIdAsync(id);
+        if (userToDelete == null)
+        {
+            return BadRequest("Invalid user id");
+        }
+
+        IdentityResult result = await _userManager.DeleteAsync(userToDelete);
+        if (!result.Succeeded)
+        {
+            return BadRequest("Failed to delete user");
+        }
+        
+        var successResponse = new Response {Status = "Success", Message = "User deleted successfully!"};
+        return Ok(successResponse);
+    }
+
     #region Helpers
 
     private async Task<bool> UserPasswordValid(TestsUser? user, string? password)

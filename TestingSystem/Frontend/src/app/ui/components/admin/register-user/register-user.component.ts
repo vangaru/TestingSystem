@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import * as CustomValidators from "../../../validation/custom-validators";
 import {RegisterModel} from "../../../../core/models/register-model";
 import {UserRoles} from "../../../../core/models/user-roles";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register-user',
@@ -21,7 +22,7 @@ export class RegisterUserComponent implements OnInit {
   public submitted: boolean = false;
   public errorMessage: string = "";
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) { }
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
     this.registerFormGroup = this.formBuilder.group({
@@ -59,7 +60,9 @@ export class RegisterUserComponent implements OnInit {
 
     let registerModel: RegisterModel = this.createRegisterModel();
     this.authService.register(registerModel).subscribe(
-      () => {},
+      () => {
+        this.router.navigate(['/admin'])
+      },
       () => {
         this.errorMessage = "Failed to register new user.";
       }
