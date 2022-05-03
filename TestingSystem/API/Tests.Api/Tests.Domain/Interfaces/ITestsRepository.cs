@@ -2,7 +2,7 @@
 
 namespace Tests.Domain.Interfaces;
 
-public interface ITestRepository
+public interface ITestsRepository
 {
     public void Add(Test test);
     public void Delete(string id);

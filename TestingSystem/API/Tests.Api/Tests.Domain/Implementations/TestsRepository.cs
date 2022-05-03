@@ -4,11 +4,11 @@ using Tests.Domain.Models;
 
 namespace Tests.Domain.Implementations;
 
-public class TestRepository : ITestRepository, IDisposable
+public class TestsRepository : ITestsRepository, IDisposable
 {
     private readonly TestsDbContext _dbContext;
 
-    public TestRepository(TestsDbContext dbContext)
+    public TestsRepository(TestsDbContext dbContext)
     {
         _dbContext = dbContext; 
     }

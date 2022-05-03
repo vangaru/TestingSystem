@@ -8,9 +8,12 @@
 
     <ItemGroup>
       <Folder Include="BackgroundJobs" />
-      <Folder Include="Implementations" />
-      <Folder Include="Interfaces" />
       <Folder Include="Models" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tests.Common\Tests.Common.csproj" />
+      <ProjectReference Include="..\Tests.Domain\Tests.Domain.csproj" />
     </ItemGroup>
 
 </Project>

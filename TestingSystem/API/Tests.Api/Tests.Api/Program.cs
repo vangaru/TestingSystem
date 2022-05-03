@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Tests.Api.Implementations;
 using Tests.Api.Interfaces;
+using Tests.Application.Implementations;
+using Tests.Application.Interfaces;
 using Tests.Domain.Data;
 using Tests.Domain.Implementations;
 using Tests.Domain.Interfaces;
@@ -52,8 +54,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ITokenProvider, TokenProvider>();
 builder.Services.AddTransient<IQuestionRepository, QuestionRepository>();
 builder.Services.AddTransient<IQuestionAnswerRepository, QuestionAnswerRepository>();
-builder.Services.AddTransient<ITestRepository, TestRepository>();
+builder.Services.AddTransient<ITestsRepository, TestsRepository>();
 builder.Services.AddTransient<ITestResultRepository, TestResultRepository>();
+builder.Services.AddTransient<ITestsService, TestsService>();
 
 var app = builder.Build();
 
