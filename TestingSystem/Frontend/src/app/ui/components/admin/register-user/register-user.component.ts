@@ -60,12 +60,10 @@ export class RegisterUserComponent implements OnInit {
 
     let registerModel: RegisterModel = this.createRegisterModel();
     this.authService.register(registerModel).subscribe(
-      () => {
-        this.router.navigate(['/admin'])
-      },
+      () => {},
       () => {
         this.errorMessage = "Failed to register new user.";
-      }
+      },
     )
   }
 

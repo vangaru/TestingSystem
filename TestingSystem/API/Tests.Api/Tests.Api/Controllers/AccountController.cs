@@ -69,8 +69,9 @@ public class AccountController : ControllerBase
             Expiration = jwtToken.ValidTo
         });
     }
-
+    
     [HttpPost]
+    [Authorize(Roles = "admin")]
     [Route("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
     {
@@ -152,9 +153,9 @@ public class AccountController : ControllerBase
             refreshToken = newRefreshToken
         });
     }
-
-    [Authorize]
+    
     [HttpPost]
+    [Authorize]
     [Route("revoke/{userName}")]
     public async Task<IActionResult> Revoke(string userName)
     {
@@ -169,9 +170,9 @@ public class AccountController : ControllerBase
         
         return NoContent();
     }
-
-    [Authorize]
+    
     [HttpPost]
+    [Authorize]
     [Route("revoke-all")]
     public async Task<IActionResult> RevokeAll()
     {
@@ -201,6 +202,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "admin")]
     public IActionResult GetUsers()
     {
         IQueryable<TestsUser> users = _userManager.Users;
@@ -222,6 +224,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Roles = "admin")]
     [Route("{id}")]
     public async Task<IActionResult> DeleteUser(string id)
     {

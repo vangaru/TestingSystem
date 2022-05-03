@@ -5,10 +5,11 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { UiModule } from './ui/ui.module';
 import {AppConfigService} from "./core/configuration/app-config.service";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AdminGuard} from "./core/guards/admin.guard";
 import {StudentGuard} from "./core/guards/student.guard";
 import {TeacherGuard} from "./core/guards/teacher.guard";
+import {TokenInterceptorService} from "./core/services/token-interceptor.service";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,11 @@ import {TeacherGuard} from "./core/guards/teacher.guard";
     HttpClientModule
   ],
   providers: [AdminGuard, StudentGuard, TeacherGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    },
     {
       provide: APP_INITIALIZER,
       deps: [AppConfigService],

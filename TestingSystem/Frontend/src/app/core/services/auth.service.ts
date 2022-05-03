@@ -6,6 +6,7 @@ import {Observable} from "rxjs";
 import {Token} from "../models/token";
 import {UserRoles} from "../models/user-roles";
 import {RegisterModel} from "../models/register-model";
+import {RefreshToken} from "../models/refresh-token";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class AuthService {
   private accountUrl: string = "account";
   private loginUrl: string = "login";
   private registerUrl: string = "register";
+  private refreshTokenUrl: string = "refresh-token";
 
   private tokenKey: string = "token";
   private refreshTokenKey: string = "refreshToken";
@@ -45,6 +47,25 @@ export class AuthService {
     localStorage.setItem(this.tokenKey, token.token);
     localStorage.setItem(this.refreshTokenKey, token.refreshToken);
     localStorage.setItem(this.userNameKey, userName);
+  }
+
+  public refreshToken(): Observable<RefreshToken> {
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    const accessToken = this.getToken();
+    const refreshToken = this.getRefreshToken();
+    if (accessToken === null || refreshToken === null) {
+      this.router.navigate(['/login']);
+      throw Error("Unauthorized.");
+    }
+    const token: RefreshToken = new RefreshToken(accessToken, refreshToken);
+    const requestBody = JSON.stringify(token);
+    return this.httpClient.post<RefreshToken>(`${this.config.apiBaseUrl}/${this.accountUrl}/${this.refreshTokenUrl}`,
+      requestBody, {headers: headers});
+  }
+
+  public updateToken(refreshToken: RefreshToken) {
+    localStorage.setItem(this.tokenKey, refreshToken.accessToken);
+    localStorage.setItem(this.refreshTokenKey, refreshToken.refreshToken);
   }
 
   public getToken(): string | null {
