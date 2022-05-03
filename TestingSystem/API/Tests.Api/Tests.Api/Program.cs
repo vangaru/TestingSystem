@@ -60,6 +60,7 @@ builder.Services.AddTransient<ITestsRepository, TestsRepository>();
 builder.Services.AddTransient<ITestResultRepository, TestResultRepository>();
 builder.Services.AddTransient<ITestsService, TestsService>();
 builder.Services.AddTransient<IQuestionsService, QuestionsService>();
+builder.Services.AddTransient<ITestsInfoProvider, TestsInfoProvider>();
 
 var app = builder.Build();
 

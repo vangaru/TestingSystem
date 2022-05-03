@@ -42,7 +42,11 @@ public class TestsRepository : ITestsRepository, IDisposable
 
     public IEnumerable<Test> Get()
     {
-        return _dbContext.Tests!.Include(t => t.Questions);
+        return _dbContext.Tests!
+            .Include(t => t.Questions)
+            .Include(t => t.AssignedStudents)
+            .Include(t => t.TestResults)
+            .Include(t => t.Creator);
     }
 
     public void Dispose()
