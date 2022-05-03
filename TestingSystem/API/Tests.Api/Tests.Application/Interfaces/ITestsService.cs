@@ -8,4 +8,8 @@ public interface ITestsService
         string creatorName, IEnumerable<string> assignedStudentNames);
 
     public Task<IEnumerable<Test>> GetCreatedTests(string creatorName);
+
+    public Test GetById(string testId);
+
+    public Task Delete(string testId, string creatorName);
 }

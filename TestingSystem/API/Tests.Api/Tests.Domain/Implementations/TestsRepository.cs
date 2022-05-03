@@ -36,7 +36,12 @@ public class TestsRepository : ITestsRepository, IDisposable
 
     public Test Get(string id)
     {
-        Test test = _dbContext.Tests!.First(t => t.Id == id);
+        Test test = _dbContext.Tests!
+            .Include(t => t.Creator)
+            .Include(t => t.Questions)
+            .Include(t => t.AssignedStudents)
+            .Include(t => t.TestResults)
+            .First(t => t.Id == id);
         return test;
     }
 

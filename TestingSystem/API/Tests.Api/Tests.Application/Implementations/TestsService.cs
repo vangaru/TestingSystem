@@ -83,4 +83,22 @@ public class TestsService : ITestsService
         IEnumerable<Test> createdTests = tests.Where(t => t.CreatorId == creator.Id);
         return createdTests;
     }
+
+    public Test GetById(string testId)
+    {
+        return _testsRepository.Get(testId);
+    }
+
+    public async Task Delete(string testId, string creatorName)
+    {
+        Test testToDelete = GetById(testId);
+        TestsUser testCreator = await _userManager.FindByNameAsync(creatorName);
+        
+        if (testCreator == null || testToDelete.CreatorId != testCreator.Id)
+        {
+            throw new UnauthorizedAccessException();
+        }
+        
+        _testsRepository.Delete(testId);
+    } 
 }

@@ -50,4 +50,28 @@ public class TestsController : ControllerBase
         var successResponse = new Response {Status = "Success", Message = "Test created successfully"};
         return Ok(successResponse);
     }
+
+    [HttpDelete]
+    [Authorize(Roles = "teacher")]
+    [Route("{id}")]
+    public async Task<IActionResult> DeleteTest(string id)
+    {
+        if (User.Identity?.Name == null)
+        {
+            return Unauthorized();
+        }
+
+        string currentUserName = User.Identity?.Name!;
+        try
+        {
+            await _testsInfoProvider.DeleteTest(id, currentUserName);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+
+        var successResponse = new Response {Status = "Success", Message = "Test deleted successfully"};
+        return Ok(successResponse);
+    }
 }

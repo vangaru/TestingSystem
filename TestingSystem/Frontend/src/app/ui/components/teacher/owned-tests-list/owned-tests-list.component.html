@@ -1,1 +1,54 @@
-<p>teacher</p>
+<div class="p-card m-5">
+  <p-table [value]="createdTests" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} tests"
+           [rowsPerPageOptions]="[5, 10, 15, 25, 50]" responsiveLayout="scroll" styleClass="p-datatable-striped"
+           scrollDirection="both" scrollHeight="calc(100vh - 400px)">
+
+    <ng-template pTemplate="caption">
+      <span class="text-3xl">Created tests</span>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="testId">Test Id<p-sortIcon field="testId"></p-sortIcon></th>
+        <th pSortableColumn="testName">Test Name<p-sortIcon field="testName"></p-sortIcon></th>
+        <th pSortableColumn="questionsCount" style="width: 300px">Questions Count<p-sortIcon field="questionsCount"></p-sortIcon></th>
+        <th pSortableColumn="resultsCount" style="width: 300px">Results Count<p-sortIcon field="resultsCount"></p-sortIcon></th>
+        <th pSortableColumn="assignedStudentsCount" style="width: 300px">Assigned Students Count<p-sortIcon field="assignedStudentsCount"></p-sortIcon></th>
+        <th style="width: 3rem;"></th>
+        <th style="width: 3rem;"></th>
+      </tr>
+      <tr>
+        <th><p-columnFilter type="text" field="testId"></p-columnFilter></th>
+        <th><p-columnFilter type="text" field="testName"></p-columnFilter></th>
+        <th><p-columnFilter type="numeric" field="questionsCount" style="width: 300px"></p-columnFilter></th>
+        <th><p-columnFilter type="numeric" field="resultsCount" style="width: 300px"></p-columnFilter></th>
+        <th><p-columnFilter type="numeric" field="assignedStudentsCount" style="width: 300px"></p-columnFilter></th>
+        <th>
+          <button pButton type="button" class="p-button-success" icon="pi pi-plus"
+                  pTooltip="Create test" [routerLink]="['/teacher']"></button>
+        </th>
+        <th style="width: 3rem;"></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-test>
+      <tr>
+        <td>{{test.testId}}</td>
+        <td>{{test.testName}}</td>
+        <td style="width: 300px">{{test.questionsCount}}</td>
+        <td style="width: 300px">{{test.resultsCount}}</td>
+        <td style="width: 300px">{{test.assignedStudentsCount}}</td>
+        <td>
+          <button pButton type="button" class="p-button-info" icon="pi pi-search"
+                  pTooltip="Test details"></button>
+        </td>
+        <td>
+          <button pButton type="button" class="p-button-danger" icon="pi pi-trash"
+                  pTooltip="Delete test" (click)="deleteTest(test.testId)"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+</div>

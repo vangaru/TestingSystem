@@ -3,3 +3,7 @@
   justify-content: space-around;
   align-items: flex-end;
 }
+
+.numeric-column {
+  max-width: 60px
+}

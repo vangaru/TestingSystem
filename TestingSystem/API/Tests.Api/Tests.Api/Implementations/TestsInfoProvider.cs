@@ -36,4 +36,9 @@ public class TestsInfoProvider : ITestsInfoProvider
 
         return createdTestsInfo;
     }
+
+    public async Task DeleteTest(string testId, string testCreatorName)
+    {
+        await _testsService.Delete(testId, testCreatorName);
+    }
 }
