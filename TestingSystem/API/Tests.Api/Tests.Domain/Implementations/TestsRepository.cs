@@ -1,4 +1,5 @@
-﻿using Tests.Domain.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Tests.Domain.Data;
 using Tests.Domain.Interfaces;
 using Tests.Domain.Models;
 
@@ -41,7 +42,7 @@ public class TestsRepository : ITestsRepository, IDisposable
 
     public IEnumerable<Test> Get()
     {
-        return _dbContext.Tests!;
+        return _dbContext.Tests!.Include(t => t.Questions);
     }
 
     public void Dispose()

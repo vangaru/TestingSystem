@@ -4,12 +4,12 @@ namespace Tests.Api.Models;
 
 public class CreateTestModel
 {
-    [Required]
-    public string? CreatorName { get; set; }
+    [Required] 
+    public string? TestName { get; set; }
     
     [Required]
     public IEnumerable<string>? AssignedStudentNames { get; set; }
     
     [Required]
-    public IEnumerable<string>? ExpectedAnswers { get; set; }
+    public IEnumerable<CreateQuestionModel>? Questions { get; set; }
 }

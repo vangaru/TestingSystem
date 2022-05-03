@@ -5,16 +5,18 @@ namespace Tests.Application.Implementations;
 
 public class QuestionsService : IQuestionsService
 {
-    public IEnumerable<Question> GetQuestionsForTest(Test test, IEnumerable<string> expectedAnswers)
+    public IEnumerable<Question> GetQuestionsForTest(Test test, IEnumerable<(string name, string expectedAnswer)> questions)
     {
-        return expectedAnswers.Select(expectedAnswer => GetAssignedTestQuestion(test, expectedAnswer));
+        return questions.Select(question => 
+            GetAssignedTestQuestion(test, question.name, question.expectedAnswer));
     }
 
-    private Question GetAssignedTestQuestion(Test test, string expectedAnswer)
+    private Question GetAssignedTestQuestion(Test test, string name, string expectedAnswer)
     {
         var question = new Question
         {
             Id = Guid.NewGuid().ToString(),
+            Name = name,
             ExpectedAnswer = expectedAnswer,
             TestId = test.Id,
             Test = test

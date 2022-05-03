@@ -21,7 +21,8 @@ public class TestsService : ITestsService
         _questionService = questionService;
     }
 
-    public async Task Add(IEnumerable<string> expectedAnswers, string creatorName, IEnumerable<string> assignedStudentNames)
+    public async Task Add(string testName, IEnumerable<(string name, string expectedAnswer)> questions, 
+        string creatorName, IEnumerable<string> assignedStudentNames)
     {
         string testId = Guid.NewGuid().ToString();
         TestsUser creator = await GetTestCreator(creatorName);
@@ -30,13 +31,14 @@ public class TestsService : ITestsService
         var test = new Test
         {
             Id = testId,
+            Name = testName,
             AssignedStudents = assignedStudents,
             CreatorId = creator.Id,
             Creator = creator,
             TestResults = new List<TestResult>()
         };
 
-        List<Question> assignedQuestions = _questionService.GetQuestionsForTest(test, expectedAnswers).ToList();
+        List<Question> assignedQuestions = _questionService.GetQuestionsForTest(test, questions).ToList();
         test.Questions = assignedQuestions;
 
         _testsRepository.Add(test);
@@ -67,5 +69,18 @@ public class TestsService : ITestsService
         }
 
         return assignedStudents;
+    }
+    
+    public async Task<IEnumerable<Test>> GetCreatedTests(string creatorName)
+    {
+        TestsUser creator = await _userManager.FindByNameAsync(creatorName);
+        if (creator == null)
+        {
+            throw new ApplicationException($"Cannot find user with name ${creatorName}");
+        }
+
+        IEnumerable<Test> tests = _testsRepository.Get();
+        IEnumerable<Test> createdTests = tests.Where(t => t.CreatorId == creator.Id);
+        return createdTests;
     }
 }
