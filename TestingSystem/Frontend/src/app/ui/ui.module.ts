@@ -15,7 +15,7 @@ import {MultiSelectModule} from "primeng/multiselect";
 
 @NgModule({
   declarations: [
-    ...componentsList
+    ...componentsList,
   ],
   imports: [
     CommonModule,

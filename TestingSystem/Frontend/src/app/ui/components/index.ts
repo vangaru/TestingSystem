@@ -3,4 +3,8 @@ export * from './admin/register-user/register-user.component';
 export * from './student/assigned-tests-list/assigned-tests-list.component';
 export * from './teacher/owned-tests-list/owned-tests-list.component';
 export * from './teacher/create-test/create-test.component';
+export * from './teacher/create-question/create-question.component';
+export * from './teacher/string-question-info/string-question-info.component';
+export * from './teacher/radiobutton-question-info/radiobutton-question-info.component';
+export * from './teacher/checkbox-question-info/checkbox-question-info.component';
 export * from './login/login.component';

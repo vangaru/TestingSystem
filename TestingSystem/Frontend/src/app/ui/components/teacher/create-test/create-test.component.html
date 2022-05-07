@@ -33,6 +33,42 @@
           </div>
         </p-fieldset>
       </div>
+      <div class="col-12">
+        <p-fieldset legend="Questions" [toggleable]="true">
+          <div class="grid p-fluid">
+            <div class="col-4">
+              <div class="grid p-fluid">
+                <div class="col-12">
+                  <button pButton type="button" class="p-button-outlined p-button-info" label="Add checkbox question"></button>
+                </div>
+                <div class="col-12">
+                  <app-create-question [questionType]="checkBoxQuestionType"></app-create-question>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="grid p-fluid">
+                <div class="col-12">
+                  <button pButton type="button" class="p-button-outlined p-button-info" label="Add radiobutton question"></button>
+                </div>
+                <div class="col-12">
+                  <app-create-question [questionType]="radioButtonQuestionType"></app-create-question>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="grid p-fluid">
+                <div class="col-12">
+                  <button pButton type="button" class="p-button-outlined p-button-info" label="Add string question"></button>
+                </div>
+                <div class="col-12">
+                  <app-create-question [questionType]="stringQuestionType"></app-create-question>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
     </div>
   </form>
 </div>
