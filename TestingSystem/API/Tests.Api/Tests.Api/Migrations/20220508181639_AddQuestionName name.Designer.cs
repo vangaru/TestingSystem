@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tests.Domain.Data;
 
@@ -10,9 +11,10 @@ using Tests.Domain.Data;
 namespace Tests.Api.Migrations
 {
     [DbContext(typeof(TestsDbContext))]
-    partial class TestsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220508181639_AddQuestionName name")]
+    partial class AddQuestionNamename
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.4");
@@ -192,7 +194,7 @@ namespace Tests.Api.Migrations
                     b.ToTable("QuestionAnswers");
                 });
 
-            modelBuilder.Entity("Tests.Domain.Models.SelectableAnswer", b =>
+            modelBuilder.Entity("Tests.Domain.Models.SelectableQuestionName", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -207,7 +209,7 @@ namespace Tests.Api.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("SelectableAnswer");
+                    b.ToTable("SelectableQuestionNames");
                 });
 
             modelBuilder.Entity("Tests.Domain.Models.Test", b =>
@@ -411,7 +413,7 @@ namespace Tests.Api.Migrations
                     b.Navigation("TestResult");
                 });
 
-            modelBuilder.Entity("Tests.Domain.Models.SelectableAnswer", b =>
+            modelBuilder.Entity("Tests.Domain.Models.SelectableQuestionName", b =>
                 {
                     b.HasOne("Tests.Domain.Models.Question", "Question")
                         .WithMany("SelectableQuestionNames")

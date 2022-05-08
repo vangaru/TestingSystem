@@ -1,5 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {QuestionTypes} from "../../../../core/models/question-types";
+import {AbstractControl, Form, FormGroup} from "@angular/forms";
+import {FormGroupService} from "../../../../core/services/form-group.service";
 
 @Component({
   selector: 'app-create-question',
@@ -18,7 +20,10 @@ export class CreateQuestionComponent implements OnInit {
   @Input()
   public questionType: string = QuestionTypes.StringQuestion;
 
-  constructor() { }
+  @Input()
+  public questionControl: AbstractControl = new FormGroup({});
+
+  constructor(public formGroupService: FormGroupService) { }
 
   ngOnInit(): void {
   }
@@ -30,5 +35,4 @@ export class CreateQuestionComponent implements OnInit {
   public selectQuestionName(questionName: string) {
     this.questionName = questionName;
   }
-
 }

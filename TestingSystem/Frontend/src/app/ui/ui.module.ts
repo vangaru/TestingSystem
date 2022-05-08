@@ -12,6 +12,8 @@ import {RouterModule} from "@angular/router";
 import {TableModule} from "primeng/table";
 import {FieldsetModule} from "primeng/fieldset";
 import {MultiSelectModule} from "primeng/multiselect";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {CheckboxModule} from "primeng/checkbox";
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import {MultiSelectModule} from "primeng/multiselect";
     TableModule,
     FormsModule,
     FieldsetModule,
-    MultiSelectModule
+    MultiSelectModule,
+    RadioButtonModule,
+    CheckboxModule,
   ],
   exports: [
   ]

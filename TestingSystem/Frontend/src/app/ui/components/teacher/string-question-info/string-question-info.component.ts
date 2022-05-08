@@ -1,4 +1,6 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup} from "@angular/forms";
+import {FormGroupService} from "../../../../core/services/form-group.service";
 
 @Component({
   selector: 'app-string-question-info',
@@ -11,7 +13,10 @@ export class StringQuestionInfoComponent implements OnInit {
   @Output()
   public onCorrectAnswerSelected: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor() { }
+  @Input()
+  public correctAnswerFormControl: FormControl = new FormControl();
+
+  constructor(public formGroupService: FormGroupService) { }
 
   ngOnInit(): void {
   }

@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {FormArray, FormControl} from "@angular/forms";
+import {FormGroupService} from "../../../../core/services/form-group.service";
+import {v4} from "uuid";
 
 @Component({
   selector: 'app-checkbox-question-info',
@@ -7,10 +10,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheckboxQuestionInfoComponent implements OnInit {
 
-  public answers: string[] = [];
+  @Input()
+  public expectedAnswerFormControl: FormControl = new FormControl();
 
-  constructor() { }
+  @Input()
+  public selectableAnswersFormArray: FormArray = new FormArray([]);
+
+  public uuid: string = v4();
+
+  constructor(public formGroupService: FormGroupService) { }
 
   ngOnInit(): void {
+  }
+
+  public addAnswer() {
+    this.selectableAnswersFormArray.push(new FormControl());
+  }
+
+  public deleteAnswer(answerId: number) {
+    this.selectableAnswersFormArray.removeAt(answerId);
   }
 }

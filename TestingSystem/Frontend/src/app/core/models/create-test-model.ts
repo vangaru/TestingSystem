@@ -4,7 +4,7 @@ export class CreateTestModel {
   constructor(
     public testName?: string,
     public assignedStudentNames?: string[],
-    public questions?: CreateQuestionModel[]
+    public questions: CreateQuestionModel[] = []
   ) {
   }
 }

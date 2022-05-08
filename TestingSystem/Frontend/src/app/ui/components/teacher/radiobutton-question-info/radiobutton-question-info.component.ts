@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {FormArray, FormControl} from "@angular/forms";
+import {FormGroupService} from "../../../../core/services/form-group.service";
+import {v4} from "uuid";
 
 @Component({
   selector: 'app-radiobutton-question-info',
@@ -7,9 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RadiobuttonQuestionInfoComponent implements OnInit {
 
-  constructor() { }
+  @Input()
+  public expectedAnswerFormControl: FormControl = new FormControl();
+
+  @Input()
+  public selectableAnswersFormArray: FormArray = new FormArray([]);
+
+  public uuid: string = v4();
+
+  constructor(public formGroupService: FormGroupService) { }
 
   ngOnInit(): void {
   }
 
+  public addAnswer() {
+    const answer = new FormControl();
+    this.selectableAnswersFormArray.push(answer);
+  }
+
+  public deleteAnswer(answerIndex: number) {
+    this.selectableAnswersFormArray.removeAt(answerIndex);
+  }
 }

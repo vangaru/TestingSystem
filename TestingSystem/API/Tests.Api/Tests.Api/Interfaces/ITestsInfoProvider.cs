@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Tests.Api.Models;
+﻿using Tests.Api.Models;
 
 namespace Tests.Api.Interfaces;
 
