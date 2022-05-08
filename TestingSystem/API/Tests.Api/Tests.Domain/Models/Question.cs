@@ -8,4 +8,8 @@ public class Question
     
     public string? TestId { get; set; }
     public Test? Test { get; set; }
+    
+    public string? QuestionType { get; set; }
+    
+    public ICollection<SelectableAnswer>? SelectableQuestionNames { get; set; }
 }

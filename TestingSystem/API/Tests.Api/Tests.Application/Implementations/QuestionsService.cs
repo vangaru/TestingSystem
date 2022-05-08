@@ -5,23 +5,34 @@ namespace Tests.Application.Implementations;
 
 public class QuestionsService : IQuestionsService
 {
-    public IEnumerable<Question> GetQuestionsForTest(Test test, IEnumerable<(string name, string expectedAnswer)> questions)
+    public IEnumerable<Question> GetQuestionsForTest(Test test, IEnumerable<Application.Models.Question> questions)
     {
         return questions.Select(question => 
-            GetAssignedTestQuestion(test, question.name, question.expectedAnswer));
+            GetAssignedTestQuestion(test, question));
     }
 
-    private Question GetAssignedTestQuestion(Test test, string name, string expectedAnswer)
+    private Question GetAssignedTestQuestion(Test test, Application.Models.Question question)
     {
-        var question = new Question
+        return new Question
         {
             Id = Guid.NewGuid().ToString(),
-            Name = name,
-            ExpectedAnswer = expectedAnswer,
+            Name = question.Name,
+            ExpectedAnswer = question.ExpectedAnswer,
             TestId = test.Id,
-            Test = test
+            Test = test,
+            QuestionType = question.Type.ToString(),
+            SelectableQuestionNames = GetSelectableQuestionNames(question).ToList()
         };
+    }
 
-        return question;
+    private IEnumerable<SelectableAnswer> GetSelectableQuestionNames(Application.Models.Question question)
+    {
+        return question.SelectableQuestionNames == null 
+            ? new List<SelectableAnswer>() 
+            : question.SelectableQuestionNames.Select(q => new SelectableAnswer
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = q
+            });
     }
 }

@@ -21,8 +21,7 @@ public class TestsService : ITestsService
         _questionService = questionService;
     }
 
-    public async Task Add(string testName, IEnumerable<(string name, string expectedAnswer)> questions, 
-        string creatorName, IEnumerable<string> assignedStudentNames)
+    public async Task Add(string testName, IEnumerable<Application.Models.Question> questions, string creatorName, IEnumerable<string> assignedStudentNames)
     {
         string testId = Guid.NewGuid().ToString();
         TestsUser creator = await GetTestCreator(creatorName);
@@ -70,7 +69,7 @@ public class TestsService : ITestsService
 
         return assignedStudents;
     }
-    
+
     public async Task<IEnumerable<Test>> GetCreatedTests(string creatorName)
     {
         TestsUser creator = await _userManager.FindByNameAsync(creatorName);

@@ -1,7 +1,9 @@
 ﻿using Tests.Api.Interfaces;
 using Tests.Api.Models;
 using Tests.Application.Interfaces;
+using Tests.Application.Models;
 using Tests.Domain.Models;
+using Question = Tests.Application.Models.Question;
 
 namespace Tests.Api.Implementations;
 
@@ -16,10 +18,27 @@ public class TestsInfoProvider : ITestsInfoProvider
 
     public async Task CreateTest(CreateTestModel createTestModel, string testCreatorName)
     {
-        IEnumerable<(string QuestionName, string ExpectedAnswer)> questions = 
-            createTestModel.Questions!.Select(q => (q.QuestionName, q.ExpectedAnswer))!;
-
+        IEnumerable<Question> questions = 
+            createTestModel.Questions!.Select(q => new Question
+            {
+                Name = q.QuestionName,
+                ExpectedAnswer = q.ExpectedAnswer,
+                Type = ParseQuestionType(q.QuestionType),
+                SelectableQuestionNames = q.SelectableAnswers
+            })!;
+        
         await _testsService.Add(createTestModel.TestName!, questions, testCreatorName, createTestModel.AssignedStudentNames!);
+    }
+
+    private QuestionType ParseQuestionType(string? questionType)
+    {
+        if (questionType == null)
+        {
+            return QuestionType.String;
+        }
+
+        var type = (QuestionType) Enum.Parse(typeof(QuestionType), questionType, true);
+        return type;
     }
 
     public async Task<IEnumerable<CreatedTestsGridItem>> GetCreatedTestsInfo(string testCreatorName)

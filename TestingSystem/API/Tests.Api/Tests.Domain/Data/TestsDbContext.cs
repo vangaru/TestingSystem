@@ -7,6 +7,7 @@ namespace Tests.Domain.Data;
 public class TestsDbContext : IdentityDbContext<TestsUser>
 {
     public DbSet<Question>? Questions { get; set; }
+    public DbSet<SelectableAnswer>? SelectableAnswer { get; set; }
     public DbSet<QuestionAnswer>? QuestionAnswers { get; set; }
     public DbSet<Test>? Tests { get; set; }
     public DbSet<TestResult>? TestResults { get; set; }
