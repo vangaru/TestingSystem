@@ -1,1 +1,8 @@
-<p>string-question-info works!</p>
+<h2>String question</h2>
+<div class="p-inputgroup">
+  <span class="p-float-label">
+    <input pInputText id="string-question-answer" name="string-question-answer" [(ngModel)]="expectedAnswer"
+           (change)="onAnswerSelected()"/>
+    <label for="string-question-answer">Expected answer</label>
+  </span>
+</div>

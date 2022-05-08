@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-string-question-info',
@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StringQuestionInfoComponent implements OnInit {
 
+  public expectedAnswer?: string;
+  @Output()
+  public onCorrectAnswerSelected: EventEmitter<string> = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  public onAnswerSelected() {
+    this.onCorrectAnswerSelected.emit(this.expectedAnswer);
+  }
 }

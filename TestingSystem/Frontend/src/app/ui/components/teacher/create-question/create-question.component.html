@@ -3,21 +3,19 @@
     <div class="col-12">
       <div class="p-inputgroup">
         <span class="p-float-label">
-          <input pInputText id="string-question-name" name="string-quesion-name" />
+          <input pInputText id="string-question-name" name="string-question-name" />
           <label for="string-question-name">Enter question name.</label>
         </span>
       </div>
-      <div class="col-12">
-        <div class="grid p-fluid" [ngSwitch]="questionType">
-          <div class="col-12" *ngSwitchCase="checkBoxQuestionType">
-            <app-checkbox-question-info></app-checkbox-question-info>
-          </div>
-          <div class="col-12" *ngSwitchCase="radioButtonQuestionType">
-            <app-radiobutton-question-info></app-radiobutton-question-info>
-          </div>
-          <div class="col-12" *ngSwitchCase="stringQuestionType">
-            <app-string-question-info></app-string-question-info>
-          </div>
+      <div [ngSwitch]="questionType">
+        <div class="col-12" *ngSwitchCase="checkBoxQuestionType">
+          <app-checkbox-question-info></app-checkbox-question-info>
+        </div>
+        <div class="col-12" *ngSwitchCase="radioButtonQuestionType">
+          <app-radiobutton-question-info></app-radiobutton-question-info>
+        </div>
+        <div class="col-12" *ngSwitchCase="stringQuestionType">
+          <app-string-question-info (onCorrectAnswerSelected)="selectCorrectAnswer($event)"></app-string-question-info>
         </div>
       </div>
     </div>

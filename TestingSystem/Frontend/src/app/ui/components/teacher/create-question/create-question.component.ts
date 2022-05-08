@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {QuestionTypes} from "../../../../core/models/QuestionTypes";
+import {QuestionTypes} from "../../../../core/models/question-types";
 
 @Component({
   selector: 'app-create-question',
@@ -12,12 +12,23 @@ export class CreateQuestionComponent implements OnInit {
   public radioButtonQuestionType = QuestionTypes.RadiobuttonQuestion;
   public stringQuestionType = QuestionTypes.StringQuestion;
 
+  private correctAnswer?: string;
+  private questionName?: string;
+
   @Input()
   public questionType: string = QuestionTypes.StringQuestion;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  public selectCorrectAnswer(correctAnswer: string) {
+    this.correctAnswer = correctAnswer;
+  }
+
+  public selectQuestionName(questionName: string) {
+    this.questionName = questionName;
   }
 
 }

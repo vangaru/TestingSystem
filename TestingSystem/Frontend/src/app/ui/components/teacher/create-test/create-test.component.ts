@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AccountService} from "../../../../core/services/account.service";
-import {QuestionTypes} from "../../../../core/models/QuestionTypes";
+import {QuestionTypes} from "../../../../core/models/question-types";
 
 @Component({
   selector: 'app-create-test',

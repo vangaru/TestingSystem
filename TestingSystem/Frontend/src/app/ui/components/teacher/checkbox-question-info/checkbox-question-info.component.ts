@@ -7,9 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheckboxQuestionInfoComponent implements OnInit {
 
+  public answers: string[] = [];
+
   constructor() { }
 
   ngOnInit(): void {
   }
-
 }
