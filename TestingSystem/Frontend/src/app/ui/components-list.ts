@@ -10,5 +10,6 @@ export const componentsList = [
   TestsComponents.AssignedTestsListComponent,
   TestsComponents.UsersListComponent,
   TestsComponents.LoginComponent,
-  TestsComponents.RegisterUserComponent
+  TestsComponents.RegisterUserComponent,
+  TestsComponents.TestResultsComponent
 ];

@@ -9,16 +9,19 @@ public class TestsService : ITestsService
 {
     private readonly ITestsRepository _testsRepository;
     private readonly IQuestionsService _questionService;
+    private readonly ITestResultService _testResultService;
     private readonly UserManager<TestsUser> _userManager;
 
     public TestsService(
         ITestsRepository testsRepository, 
         UserManager<TestsUser> userManager, 
-        IQuestionsService questionService)
+        IQuestionsService questionService, 
+        ITestResultService testResultService)
     {
         _testsRepository = testsRepository;
         _userManager = userManager;
         _questionService = questionService;
+        _testResultService = testResultService;
     }
 
     public async Task Add(string testName, IEnumerable<Application.Models.Question> questions, string creatorName, IEnumerable<string> assignedStudentNames)
@@ -40,6 +43,9 @@ public class TestsService : ITestsService
         List<Question> assignedQuestions = _questionService.GetQuestionsForTest(test, questions).ToList();
         test.Questions = assignedQuestions;
 
+        List<TestResult> testResults = _testResultService.InitializeTestResultsForAssignees(assignedStudents, test).ToList();
+        test.TestResults = testResults;
+        
         _testsRepository.Add(test);
     }
 
@@ -81,6 +87,32 @@ public class TestsService : ITestsService
         IEnumerable<Test> tests = _testsRepository.Get();
         IEnumerable<Test> createdTests = tests.Where(t => t.CreatorId == creator.Id);
         return createdTests;
+    }
+
+    public async Task<IEnumerable<Test>> GetAssignedTests(string assigneeName)
+    {
+        TestsUser assignee = await _userManager.FindByNameAsync(assigneeName);
+        if (assignee == null)
+        {
+            throw new ApplicationException($"Cannot find user with name ${assigneeName}");
+        }
+
+        IEnumerable<Test> tests = _testsRepository.Get();
+        IEnumerable<Test> assignedTests = tests
+            .Where(t => t.AssignedStudents != null && t.AssignedStudents.Contains(assignee));
+        return assignedTests;
+    }
+
+    public async Task<TestResult?> GetAssigneeTestResult(string assigneeName, Test test)
+    {
+        TestsUser assignee = await _userManager.FindByNameAsync(assigneeName);
+        if (assignee == null)
+        {
+            return null;
+        }
+
+        TestResult testResult = test.TestResults?.First(t => t.StudentId == assignee.Id)!;
+        return testResult;
     }
 
     public Test GetById(string testId)

@@ -4,9 +4,9 @@ export function createTestFormGroup(formBuilder: FormBuilder): FormGroup {
   return formBuilder.group({
     testName: formBuilder.control(null, Validators.required),
     assignedStudentNames: formBuilder.control(null, Validators.required),
-    stringQuestions: formBuilder.array([], Validators.required),
-    radiobuttonQuestions: formBuilder.array([], Validators.required),
-    checkboxQuestions: formBuilder.array([], Validators.required)
+    stringQuestions: formBuilder.array([]),
+    radiobuttonQuestions: formBuilder.array([]),
+    checkboxQuestions: formBuilder.array([])
   });
 }
 

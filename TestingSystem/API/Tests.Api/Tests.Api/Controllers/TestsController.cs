@@ -18,6 +18,7 @@ public class TestsController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "teacher")]
+    [Route("teacher")]
     public async Task<IActionResult> GetCreatedTests()
     {
         if (User.Identity?.Name == null)
@@ -30,8 +31,46 @@ public class TestsController : ControllerBase
         return Ok(testsGridItems);
     }
 
+    [HttpGet]
+    [Authorize(Roles = "teacher")]
+    [Route("teacher/{id}")]
+    public async Task<IActionResult> GetTestResults(string id)
+    {
+        if (User.Identity?.Name == null)
+        {
+            return Unauthorized();
+        }
+
+        string currentUserName = User.Identity?.Name!;
+        try
+        {
+            IEnumerable<TestResultsGridItem> testResults = 
+                await _testsInfoProvider.GetCreatedTestResults(id, currentUserName);
+            return Ok(testResults);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "student")]
+    [Route("student")]
+    public async Task<IActionResult> GetAssignedTests()
+    {
+        if (User.Identity?.Name == null)
+        {
+            return Unauthorized();
+        }
+
+        string userName = User.Identity.Name;
+        return Ok();
+    }
+
     [HttpPost]
     [Authorize(Roles = "teacher")]
+    [Route("teacher")]
     public async Task<IActionResult> CreateTest([FromBody] CreateTestModel testModel)
     {
         if (User.Identity?.Name == null)
@@ -53,7 +92,7 @@ public class TestsController : ControllerBase
 
     [HttpDelete]
     [Authorize(Roles = "teacher")]
-    [Route("{id}")]
+    [Route("teacher/{id}")]
     public async Task<IActionResult> DeleteTest(string id)
     {
         if (User.Identity?.Name == null)

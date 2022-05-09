@@ -1,0 +1,40 @@
+<div class="grid">
+  <div class="col-12">
+    <button pButton [routerLink]="['/teacher']" icon="pi pi-arrow-left" label="Go back" pTooltip="Conversion jobs"
+            class="p-button-link"></button>
+  </div>
+</div>
+
+<div class="p-card m-5">
+  <p-table [value]="testResults" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
+           [rowsPerPageOptions]="[5, 10, 15, 25, 50]" responsiveLayout="scroll" styleClass="p-datatable-striped"
+           scrollDirection="both" scrollHeight="calc(100vh - 440px)">
+
+    <ng-template pTemplate="caption">
+      <span class="text-3xl">Test results</span>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="testId">Test Id<p-sortIcon field="testId"></p-sortIcon></th>
+        <th pSortableColumn="testName">Test Name<p-sortIcon field="testName"></p-sortIcon></th>
+        <th pSortableColumn="studentName">Student Name<p-sortIcon field="studentName"></p-sortIcon></th>
+        <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon></th>
+        <th pSortableColumn="result">Result<p-sortIcon field="result"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-result>
+      <tr>
+        <td>{{result.testId}}</td>
+        <td>{{result.testName}}</td>
+        <td>{{result.studentName}}</td>
+        <td>{{result.status}}</td>
+        <td *ngIf="result.status === StatusDone">{{result.result}}</td>
+        <td *ngIf="result.status === StatusAssigned"></td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+</div>

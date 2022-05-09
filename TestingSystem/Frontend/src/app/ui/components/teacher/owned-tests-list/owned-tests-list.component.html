@@ -41,7 +41,7 @@
         <td style="width: 300px">{{test.assignedStudentsCount}}</td>
         <td>
           <button pButton type="button" class="p-button-info" icon="pi pi-search"
-                  pTooltip="Test details"></button>
+                  pTooltip="Test details" [routerLink]="['/teacher/tests', test.testId]"></button>
         </td>
         <td>
           <button pButton type="button" class="p-button-danger" icon="pi pi-trash"

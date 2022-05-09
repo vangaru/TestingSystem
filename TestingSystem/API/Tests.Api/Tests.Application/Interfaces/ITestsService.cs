@@ -10,6 +10,10 @@ public interface ITestsService
 
     public Task<IEnumerable<Test>> GetCreatedTests(string creatorName);
 
+    public Task<IEnumerable<Test>> GetAssignedTests(string assigneeName);
+
+    public Task<TestResult?> GetAssigneeTestResult(string assigneeName, Test test);
+
     public Test GetById(string testId);
 
     public Task Delete(string testId, string creatorName);

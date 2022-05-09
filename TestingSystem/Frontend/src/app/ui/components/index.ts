@@ -8,3 +8,4 @@ export * from './teacher/string-question-info/string-question-info.component';
 export * from './teacher/radiobutton-question-info/radiobutton-question-info.component';
 export * from './teacher/checkbox-question-info/checkbox-question-info.component';
 export * from './login/login.component';
+export * from './teacher/test-results/test-results.component';
