@@ -1,1 +1,38 @@
-<p>student</p>
+<div class="p-card m-5">
+  <p-table [value]="assignedTests" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} tests"
+           [rowsPerPageOptions]="[5, 10, 15, 25, 50]" responsiveLayout="scroll" styleClass="p-datatable-striped"
+           scrollDirection="both" scrollHeight="calc(100vh - 400px)">
+
+    <ng-template pTemplate="caption">
+      <span class="text-3xl">Tests</span>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="testId">Test Id<p-sortIcon field="testId"></p-sortIcon></th>
+        <th pSortableColumn="testName">Test Name<p-sortIcon field="testName"></p-sortIcon></th>
+        <th pSortableColumn="teacherName">Teacher Name<p-sortIcon field="teacherName"></p-sortIcon></th>
+        <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon></th>
+        <th pSortableColumn="questionsCount">Questions<p-sortIcon field="questionsCount"></p-sortIcon></th>
+        <th pSortableColumn="results">Results<p-sortIcon field="results"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-test>
+      <tr>
+        <td>{{test.testId}}</td>
+        <td>{{test.testName}}</td>
+        <td>{{test.teacherName}}</td>
+        <td>{{test.status}}</td>
+        <td>{{test.questionsCount}}</td>
+        <td *ngIf="test.status === StatusDone">{{test.result}}</td>
+        <td *ngIf="test.status === StatusAssigned">
+          <button pButton type="button" class="p-button-link p-button-outlined" icon="pi pi-pencil"
+                  [routerLink]="['/student/tests', test.testId]"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+</div>

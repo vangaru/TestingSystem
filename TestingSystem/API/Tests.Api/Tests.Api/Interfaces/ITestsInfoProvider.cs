@@ -9,4 +9,5 @@ public interface ITestsInfoProvider
     public Task<IEnumerable<AssignedTestsGridItem>> GetAssignedTestsInfo(string assigneeName);
     public Task<IEnumerable<TestResultsGridItem>> GetCreatedTestResults(string testId, string testCreatorName);
     public Task DeleteTest(string testId, string testCreatorName);
+    public Task<TakeTestModel> GetAssignedTest(string testId, string userName);
 }

@@ -18,7 +18,7 @@ public class TestsController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "teacher")]
-    [Route("teacher")]
+    [Route("teacher/tests")]
     public async Task<IActionResult> GetCreatedTests()
     {
         if (User.Identity?.Name == null)
@@ -33,7 +33,7 @@ public class TestsController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "teacher")]
-    [Route("teacher/{id}")]
+    [Route("teacher/tests/{id}")]
     public async Task<IActionResult> GetTestResults(string id)
     {
         if (User.Identity?.Name == null)
@@ -56,7 +56,7 @@ public class TestsController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "student")]
-    [Route("student")]
+    [Route("student/tests")]
     public async Task<IActionResult> GetAssignedTests()
     {
         if (User.Identity?.Name == null)
@@ -65,12 +65,37 @@ public class TestsController : ControllerBase
         }
 
         string userName = User.Identity.Name;
-        return Ok();
+        IEnumerable<AssignedTestsGridItem> assignedTestsGridItems =
+            await _testsInfoProvider.GetAssignedTestsInfo(userName);
+        return Ok(assignedTestsGridItems);
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "student")]
+    [Route("student/tests/{id}")]
+    public async Task<IActionResult> GetAssignedTest(string id)
+    {
+        if (User.Identity?.Name == null)
+        {
+            return Unauthorized();
+        }
+
+        string userName = User.Identity.Name;
+
+        try
+        {
+            TakeTestModel assignedTest = await _testsInfoProvider.GetAssignedTest(id, userName);
+            return Ok(assignedTest);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
     }
 
     [HttpPost]
     [Authorize(Roles = "teacher")]
-    [Route("teacher")]
+    [Route("teacher/tests")]
     public async Task<IActionResult> CreateTest([FromBody] CreateTestModel testModel)
     {
         if (User.Identity?.Name == null)
@@ -92,7 +117,7 @@ public class TestsController : ControllerBase
 
     [HttpDelete]
     [Authorize(Roles = "teacher")]
-    [Route("teacher/{id}")]
+    [Route("teacher/tests/{id}")]
     public async Task<IActionResult> DeleteTest(string id)
     {
         if (User.Identity?.Name == null)

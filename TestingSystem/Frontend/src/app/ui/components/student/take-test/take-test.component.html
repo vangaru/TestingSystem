@@ -1,0 +1,27 @@
+<div class="grid">
+  <div class="col-12">
+    <button pButton type="button" icon="pi pi-arrow-left" label="Go back" pTooltip="Conversion jobs"
+            class="p-button-link" [routerLink]="['/student']">
+    </button>
+  </div>
+</div>
+
+
+<div class="p-card m-5 p-5 p-fluid">
+  <h1>{{test?.testName}}</h1>
+  <div class="grid">
+    <div *ngFor="let question of test?.questions" class="col-12">
+      <div [ngSwitch]="question?.questionType">
+        <div *ngSwitchCase="stringQuestionType">
+          <app-string-question [question]="question"></app-string-question>
+        </div>
+        <div *ngSwitchCase="checkboxQuestionType">
+          <app-checkbox-question [question]="question"></app-checkbox-question>
+        </div>
+        <div *ngSwitchCase="radiobuttonQuestionType">
+          <app-radiobutton-question [question]="question"></app-radiobutton-question>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

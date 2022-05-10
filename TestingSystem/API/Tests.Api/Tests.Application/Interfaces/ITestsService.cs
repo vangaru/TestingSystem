@@ -14,7 +14,7 @@ public interface ITestsService
 
     public Task<TestResult?> GetAssigneeTestResult(string assigneeName, Test test);
 
-    public Test GetById(string testId);
+    public Task<Test> GetByIdAndUserName(string testId, string assigneeName);
 
     public Task Delete(string testId, string creatorName);
 }

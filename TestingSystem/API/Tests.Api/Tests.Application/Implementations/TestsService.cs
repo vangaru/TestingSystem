@@ -115,14 +115,22 @@ public class TestsService : ITestsService
         return testResult;
     }
 
-    public Test GetById(string testId)
+    public async Task<Test> GetByIdAndUserName(string testId, string assigneeName)
     {
-        return _testsRepository.Get(testId);
+        Test test = _testsRepository.Get(testId);
+        TestsUser assignee = await _userManager.FindByNameAsync(assigneeName);
+        
+        if (test.AssignedStudents == null || !test.AssignedStudents.Contains(assignee))
+        {
+            throw new UnauthorizedAccessException();
+        }
+
+        return test;
     }
 
     public async Task Delete(string testId, string creatorName)
     {
-        Test testToDelete = GetById(testId);
+        Test testToDelete = _testsRepository.Get(testId);
         TestsUser testCreator = await _userManager.FindByNameAsync(creatorName);
         
         if (testCreator == null || testToDelete.CreatorId != testCreator.Id)

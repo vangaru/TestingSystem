@@ -38,7 +38,8 @@ public class TestsRepository : ITestsRepository, IDisposable
     {
         Test test = _dbContext.Tests!
             .Include(t => t.Creator)
-            .Include(t => t.Questions)
+            .Include(t => t.Questions)!
+                .ThenInclude(q => q.SelectableQuestionNames)
             .Include(t => t.AssignedStudents)
             .Include(t => t.TestResults)
             .First(t => t.Id == id);
@@ -48,7 +49,8 @@ public class TestsRepository : ITestsRepository, IDisposable
     public IEnumerable<Test> Get()
     {
         return _dbContext.Tests!
-            .Include(t => t.Questions)
+            .Include(t => t.Questions)!
+                .ThenInclude(q => q.SelectableQuestionNames)
             .Include(t => t.AssignedStudents)
             .Include(t => t.TestResults)
             .Include(t => t.Creator);

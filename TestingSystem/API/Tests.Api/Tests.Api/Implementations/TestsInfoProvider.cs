@@ -60,17 +60,19 @@ public class TestsInfoProvider : ITestsInfoProvider
 
     public async Task<IEnumerable<AssignedTestsGridItem>> GetAssignedTestsInfo(string assigneeName)
     {
-        IEnumerable<Test> assignedTests = await _testsService.GetAssignedTests(assigneeName);
-        IEnumerable<AssignedTestsGridItem> assignedTestsInfo = assignedTests.Select(test => new AssignedTestsGridItem
-        {
-            TestId = test.Id,
-            TestName = test.Name,
-            QuestionsCount = test.Questions?.Count ?? 0,
-            Results = 0,
-            TeacherName = test.Creator?.UserName ?? ""
-        });
-
-        return assignedTestsInfo;
+        IEnumerable<TestResult> assignedTestResults = await _testResultService.GetAssignedTestResults(assigneeName);
+        IEnumerable<AssignedTestsGridItem> assignedTestsGridItems = assignedTestResults
+            .Select(result => new AssignedTestsGridItem
+            {
+                TestId = result.TestId,
+                TestName = result.Test!.Name,
+                TeacherName = result.Test.Creator!.UserName,
+                Status = result.Status!,
+                QuestionsCount = result.Test!.Questions!.Count,
+                Results = TestPassed(result.Status) ? _testResultService.CalculateResults(result.QuestionAnswers!) : 0,
+            });
+        
+        return assignedTestsGridItems;
     }
 
     public async Task<IEnumerable<TestResultsGridItem>> GetCreatedTestResults(string testId, string testCreatorName)
@@ -96,5 +98,24 @@ public class TestsInfoProvider : ITestsInfoProvider
     public async Task DeleteTest(string testId, string testCreatorName)
     {
         await _testsService.Delete(testId, testCreatorName);
+    }
+
+    public async Task<TakeTestModel> GetAssignedTest(string testId, string userName)
+    {
+        Test test = await _testsService.GetByIdAndUserName(testId, userName);
+        var testToTake = new TakeTestModel
+        {
+            TestId = test.Id,
+            TestName = test.Name,
+            Questions = test.Questions!.Select(q => new TakeQuestionModel
+            {
+                QuestionId = q.Id,
+                QuestionName = q.Name,
+                QuestionType = q.QuestionType,
+                SelectableQuestionNames = q.SelectableQuestionNames!.Select(a => a.Name)
+            })
+        };
+
+        return testToTake;
     }
 }

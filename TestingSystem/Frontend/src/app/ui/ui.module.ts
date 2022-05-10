@@ -14,10 +14,18 @@ import {FieldsetModule} from "primeng/fieldset";
 import {MultiSelectModule} from "primeng/multiselect";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {CheckboxModule} from "primeng/checkbox";
+import { TakeTestComponent } from './components/student/take-test/take-test.component';
+import { RadiobuttonQuestionComponent } from './components/student/radiobutton-question/radiobutton-question.component';
+import { CheckboxQuestionComponent } from './components/student/checkbox-question/checkbox-question.component';
+import { StringQuestionComponent } from './components/student/string-question/string-question.component';
 
 @NgModule({
   declarations: [
     ...componentsList,
+    TakeTestComponent,
+    RadiobuttonQuestionComponent,
+    CheckboxQuestionComponent,
+    StringQuestionComponent,
   ],
   imports: [
     CommonModule,

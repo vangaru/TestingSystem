@@ -9,3 +9,7 @@ export * from './teacher/radiobutton-question-info/radiobutton-question-info.com
 export * from './teacher/checkbox-question-info/checkbox-question-info.component';
 export * from './login/login.component';
 export * from './teacher/test-results/test-results.component';
+export * from './student/take-test/take-test.component';
+export * from './student/string-question/string-question.component';
+export * from './student/radiobutton-question/radiobutton-question.component';
+export * from './student/checkbox-question/checkbox-question.component';

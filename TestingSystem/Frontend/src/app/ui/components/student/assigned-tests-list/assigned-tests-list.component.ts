@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {AssignedTestsGridItem} from "../../../../core/models/assigned-tests-grid-item";
+import {TestsService} from "../../../../core/services/tests.service";
+import {TestStatuses} from "../../../../core/models/test-statuses";
 
 @Component({
   selector: 'app-assigned-tests-list',
@@ -7,9 +10,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AssignedTestsListComponent implements OnInit {
 
-  constructor() { }
+  public assignedTests: AssignedTestsGridItem[] = [];
+  public StatusAssigned = TestStatuses.Assigned;
+  public StatusDone = TestStatuses.Done;
+
+  constructor(private testsService: TestsService) { }
 
   ngOnInit(): void {
+    this.refreshTests();
   }
 
+  private refreshTests() {
+    this.testsService.getAssignedTests().subscribe((tests) => {
+      this.assignedTests = [...tests];
+    })
+  }
 }

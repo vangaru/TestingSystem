@@ -11,5 +11,8 @@ export const componentsList = [
   TestsComponents.UsersListComponent,
   TestsComponents.LoginComponent,
   TestsComponents.RegisterUserComponent,
-  TestsComponents.TestResultsComponent
+  TestsComponents.TestResultsComponent,
+  TestsComponents.StringQuestionComponent,
+  TestsComponents.RadiobuttonQuestionComponent,
+  TestsComponents.CheckboxQuestionComponent
 ];

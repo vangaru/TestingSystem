@@ -1,0 +1,12 @@
+<div class="p-card p-5">
+  <span class="text-xl">{{question?.questionName}}</span>
+  <div class="grid mt-5">
+    <div class="col-12" *ngFor="let answer of question?.selectableQuestionNames, let i = index">
+      <div class="grid">
+        <div class="col-12">
+          <p-radioButton [label]="answer" name="{{uuid}}" value="{{i}}" [(ngModel)]="questionAnswer"></p-radioButton>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -63,6 +63,22 @@ public class TestResultService : ITestResultService
         return testResults;
     }
 
+    public async Task<IEnumerable<TestResult>> GetAssignedTestResults(string assigneeName)
+    {
+        TestsUser assignee = await _userManager.FindByNameAsync(assigneeName);
+        
+        if (assignee == null)
+        {
+            throw new ApplicationException($"Cannot find user with name ${assigneeName}");
+        }
+
+        IEnumerable<Test> tests = _testsRepository.Get();
+        IEnumerable<TestResult> assignedTestResults =
+            tests.SelectMany(t => t.TestResults!.Where(r => r.StudentId == assignee.Id));
+
+        return assignedTestResults;
+    }
+
     private int GetCorrectAnswersCount(IEnumerable<QuestionAnswer> questionAnswers)
     {
         return questionAnswers.Count(answer => 
