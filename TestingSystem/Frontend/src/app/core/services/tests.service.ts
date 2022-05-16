@@ -7,6 +7,7 @@ import {CreateTestModel} from "../models/create-test-model";
 import {TestResultsGridItem} from "../models/test-results-grid-item";
 import {AssignedTestsGridItem} from "../models/assigned-tests-grid-item";
 import {TakeTestModel} from "../models/take-test-model";
+import {AnswerTestModel} from "../models/answer-test-model";
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,12 @@ export class TestsService {
 
   public getAssignedTest(testId: string): Observable<TakeTestModel> {
     return this.httpClient.get<TakeTestModel>(`${this.config.apiBaseUrl}/${this.testsUrl}/${this.studentUrl}/tests/${testId}`);
+  }
+
+  public answerTest(answerModel: AnswerTestModel): Observable<any> {
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    const requestBody = JSON.stringify(answerModel);
+
+    return this.httpClient.post<any>(`${this.config.apiBaseUrl}/${this.testsUrl}/${this.studentUrl}/tests`, requestBody, {headers: headers});
   }
 }

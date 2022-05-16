@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Tests.Application.Interfaces;
+using Tests.Application.Models;
 using Tests.Domain.Interfaces;
 using Tests.Domain.Models;
+using Question = Tests.Domain.Models.Question;
 
 namespace Tests.Application.Implementations;
 
@@ -89,32 +91,6 @@ public class TestsService : ITestsService
         return createdTests;
     }
 
-    public async Task<IEnumerable<Test>> GetAssignedTests(string assigneeName)
-    {
-        TestsUser assignee = await _userManager.FindByNameAsync(assigneeName);
-        if (assignee == null)
-        {
-            throw new ApplicationException($"Cannot find user with name ${assigneeName}");
-        }
-
-        IEnumerable<Test> tests = _testsRepository.Get();
-        IEnumerable<Test> assignedTests = tests
-            .Where(t => t.AssignedStudents != null && t.AssignedStudents.Contains(assignee));
-        return assignedTests;
-    }
-
-    public async Task<TestResult?> GetAssigneeTestResult(string assigneeName, Test test)
-    {
-        TestsUser assignee = await _userManager.FindByNameAsync(assigneeName);
-        if (assignee == null)
-        {
-            return null;
-        }
-
-        TestResult testResult = test.TestResults?.First(t => t.StudentId == assignee.Id)!;
-        return testResult;
-    }
-
     public async Task<Test> GetByIdAndUserName(string testId, string assigneeName)
     {
         Test test = _testsRepository.Get(testId);
@@ -139,5 +115,22 @@ public class TestsService : ITestsService
         }
         
         _testsRepository.Delete(testId);
-    } 
+    }
+
+    public async Task Answer(string testId, IEnumerable<(string questionId, string answer)> questionAnswers, string studentName)
+    {
+        Test testToAnswer = _testsRepository.Get(testId);
+        TestsUser student = await _userManager.FindByNameAsync(studentName);
+
+        if (student == null || !testToAnswer.AssignedStudents!.Contains(student))
+        {
+            throw new UnauthorizedAccessException();
+        }
+
+        IEnumerable<QuestionAnswer> answers = _questionService.GetQuestionAnswers(questionAnswers);
+        TestResult testResult = testToAnswer.TestResults!.First(r => r.StudentId == student.Id);
+        testResult.QuestionAnswers = answers.ToList();
+        testResult.Status = TestStatus.Done.ToString();
+        _testsRepository.Update(testId, testToAnswer);
+    }
 }

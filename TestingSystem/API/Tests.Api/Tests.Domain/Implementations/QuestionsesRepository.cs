@@ -4,11 +4,11 @@ using Tests.Domain.Models;
 
 namespace Tests.Domain.Implementations;
 
-public class QuestionRepository : IQuestionRepository
+public class QuestionsesRepository : IQuestionsRepository
 {
     private readonly TestsDbContext _dbContext;
     
-    public QuestionRepository(TestsDbContext dbContext)
+    public QuestionsesRepository(TestsDbContext dbContext)
     {
         _dbContext = dbContext;
     }

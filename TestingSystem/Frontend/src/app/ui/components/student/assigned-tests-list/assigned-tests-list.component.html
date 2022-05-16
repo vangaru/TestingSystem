@@ -26,7 +26,7 @@
         <td>{{test.teacherName}}</td>
         <td>{{test.status}}</td>
         <td>{{test.questionsCount}}</td>
-        <td *ngIf="test.status === StatusDone">{{test.result}}</td>
+        <td *ngIf="test.status === StatusDone">{{test.results}}</td>
         <td *ngIf="test.status === StatusAssigned">
           <button pButton type="button" class="p-button-link p-button-outlined" icon="pi pi-pencil"
                   [routerLink]="['/student/tests', test.testId]"></button>

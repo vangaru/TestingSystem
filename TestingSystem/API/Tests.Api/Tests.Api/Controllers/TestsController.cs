@@ -115,6 +115,34 @@ public class TestsController : ControllerBase
         return Ok(successResponse);
     }
 
+    [HttpPost]
+    [Authorize(Roles = "student")]
+    [Route("student/tests")]
+    public async Task<IActionResult> AnswerTest([FromBody] AnswerTestModel answerTestModel)
+    {
+        if (User.Identity?.Name == null)
+        {
+            return Unauthorized();
+        }
+        
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        try
+        {
+            string currentUserName = User.Identity.Name;
+            await _testsInfoProvider.AnswerTest(answerTestModel, currentUserName);
+            var successResponse = new Response {Status = "Success", Message = "Test answered"};
+            return Ok(successResponse);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+    }
+
     [HttpDelete]
     [Authorize(Roles = "teacher")]
     [Route("teacher/tests/{id}")]

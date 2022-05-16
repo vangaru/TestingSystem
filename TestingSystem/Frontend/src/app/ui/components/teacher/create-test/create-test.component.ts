@@ -7,6 +7,7 @@ import * as Forms from "../../../forms/create-test-forms";
 import {CreateTestModel} from "../../../../core/models/create-test-model";
 import {CreateQuestionModel} from "../../../../core/models/create-question-model";
 import {TestsService} from "../../../../core/services/tests.service";
+import {CreateSelectableAnswerModel} from "../../../../core/models/create-selectable-answer-model";
 
 @Component({
   selector: 'app-create-test',
@@ -98,8 +99,7 @@ export class CreateTestComponent implements OnInit {
     return model;
   }
 
-  private prepareStringQuestions(model: CreateTestModel, questions: Array<any>) {
-    console.log(questions);
+  private  prepareStringQuestions(model: CreateTestModel, questions: Array<any>) {
     for (let question of questions) {
       let stringQuestion = new CreateQuestionModel();
       stringQuestion.questionName = question.questionName;
@@ -115,18 +115,25 @@ export class CreateTestComponent implements OnInit {
       radiobuttonQuestion.questionName = question.questionName;
       radiobuttonQuestion.expectedAnswer = question.expectedAnswer;
       radiobuttonQuestion.questionType = QuestionTypes.RadiobuttonQuestion;
-      radiobuttonQuestion.selectableAnswers = question.selectableAnswers;
+      let selectableAnswers = question.selectableAnswers as Array<any>;
+      selectableAnswers.forEach((answer, index) => {
+        radiobuttonQuestion.selectableAnswers.push(new CreateSelectableAnswerModel(answer, index));
+      })
       model.questions?.push(radiobuttonQuestion);
     }
   }
 
+  // I know that it is duplicated
   private prepareCheckboxQuestions(model: CreateTestModel, questions: Array<any>) {
     for (let question of questions) {
       let checkboxQuestion = new CreateQuestionModel();
       checkboxQuestion.questionName = question.questionName;
       checkboxQuestion.expectedAnswer = question.expectedAnswer.toString();
       checkboxQuestion.questionType = QuestionTypes.CheckboxQuestion;
-      checkboxQuestion.selectableAnswers = question.selectableAnswers;
+      let selectableAnswers = question.selectableAnswers as Array<any>;
+      selectableAnswers.forEach((answer, index) => {
+        checkboxQuestion.selectableAnswers.push(new CreateSelectableAnswerModel(answer, index));
+      })
       model.questions?.push(checkboxQuestion);
     }
   }

@@ -8,17 +8,17 @@ namespace Tests.Api.Controllers;
 [Route("[controller]")]
 public class QuestionsController : ControllerBase
 {
-    private readonly IQuestionRepository _questionRepository;
+    private readonly IQuestionsRepository _questionsRepository;
 
-    public QuestionsController(IQuestionRepository questionRepository)
+    public QuestionsController(IQuestionsRepository questionsRepository)
     {
-        _questionRepository = questionRepository;
+        _questionsRepository = questionsRepository;
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        List<Question> questions = _questionRepository.Get().ToList();
+        List<Question> questions = _questionsRepository.Get().ToList();
         return Ok(questions);
     }
 
@@ -26,14 +26,14 @@ public class QuestionsController : ControllerBase
     [Route("{id}")]
     public IActionResult Get(string id)
     {
-        Question question = _questionRepository.Get(id);
+        Question question = _questionsRepository.Get(id);
         return Ok(question);
     }
     
     [HttpPost]
     public IActionResult Add([FromBody] Question question)
     {
-        _questionRepository.Add(question);
+        _questionsRepository.Add(question);
         return NoContent();
     }
     
@@ -41,7 +41,7 @@ public class QuestionsController : ControllerBase
     [Route("{id}")]
     public IActionResult Update(string id, [FromBody] Question question)
     {
-        _questionRepository.Update(id, question);
+        _questionsRepository.Update(id, question);
         return NoContent();
     }
 
@@ -49,7 +49,7 @@ public class QuestionsController : ControllerBase
     [Route("{id}")]
     public IActionResult Delete(string id)
     {
-        _questionRepository.Delete(id);
+        _questionsRepository.Delete(id);
         return NoContent();
     }
 }

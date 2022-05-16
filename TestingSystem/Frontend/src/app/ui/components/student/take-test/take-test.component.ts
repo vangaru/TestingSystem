@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {TakeTestModel} from "../../../../core/models/take-test-model";
 import {ActivatedRoute} from "@angular/router";
 import {TestsService} from "../../../../core/services/tests.service";
+import {AnswerQuestionModel} from "../../../../core/models/answer-question-model";
+import {AnswerTestModel} from "../../../../core/models/answer-test-model";
 
 @Component({
   selector: 'app-take-test',
@@ -9,6 +11,8 @@ import {TestsService} from "../../../../core/services/tests.service";
   styleUrls: ['./take-test.component.css']
 })
 export class TakeTestComponent implements OnInit {
+
+  private answers: AnswerTestModel = new AnswerTestModel();
 
   public test?: TakeTestModel;
   public stringQuestionType: string = "String";
@@ -25,4 +29,18 @@ export class TakeTestComponent implements OnInit {
     });
   }
 
+  public onAnswer(event: AnswerQuestionModel) {
+    const answer: AnswerQuestionModel = event;
+    this.answers.questionAnswers.forEach(qa => {
+      if (qa.questionId === answer.questionId) {
+        this.answers.questionAnswers = [...this.answers.questionAnswers.filter(a => a.questionId !== answer.questionId)]
+      }
+    })
+    this.answers.questionAnswers?.push(event);
+  };
+
+  public onSubmit() {
+    this.answers.testId = this.test?.testId;
+    this.testsService.answerTest(this.answers).subscribe();
+  }
 }

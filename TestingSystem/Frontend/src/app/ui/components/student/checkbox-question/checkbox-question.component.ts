@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TakeQuestionModel} from "../../../../core/models/take-question-model";
 import {v4} from "uuid";
+import {AnswerQuestionModel} from "../../../../core/models/answer-question-model";
 
 @Component({
   selector: 'app-checkbox-question',
@@ -15,9 +16,17 @@ export class CheckboxQuestionComponent implements OnInit {
   @Input()
   public question?: TakeQuestionModel;
 
+  @Output()
+  public answer: EventEmitter<AnswerQuestionModel> = new EventEmitter<AnswerQuestionModel>();
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  public onAnswer(event: any) {
+    const answer: string = event.checked.toString();
+    const answerModel: AnswerQuestionModel = new AnswerQuestionModel(this.question?.questionId, answer);
+    this.answer.emit(answerModel);
+  }
 }

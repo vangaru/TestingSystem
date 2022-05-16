@@ -41,7 +41,8 @@ public class TestsRepository : ITestsRepository, IDisposable
             .Include(t => t.Questions)!
                 .ThenInclude(q => q.SelectableQuestionNames)
             .Include(t => t.AssignedStudents)
-            .Include(t => t.TestResults)
+            .Include(t => t.TestResults)!
+                .ThenInclude(r => r.QuestionAnswers)
             .First(t => t.Id == id);
         return test;
     }
@@ -52,7 +53,8 @@ public class TestsRepository : ITestsRepository, IDisposable
             .Include(t => t.Questions)!
                 .ThenInclude(q => q.SelectableQuestionNames)
             .Include(t => t.AssignedStudents)
-            .Include(t => t.TestResults)
+            .Include(t => t.TestResults)!
+                .ThenInclude(r => r.QuestionAnswers)
             .Include(t => t.Creator);
     }
 

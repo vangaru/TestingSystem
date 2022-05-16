@@ -1,10 +1,11 @@
 <div class="p-card p-5">
   <span class="text-xl">{{question?.questionName}}</span>
   <div class="grid mt-5">
-    <div class="col-12" *ngFor="let answer of question?.selectableQuestionNames, let i = index">
+    <div class="col-12" *ngFor="let answer of question?.selectableQuestions, let i = index">
       <div class="grid">
         <div class="col-12">
-          <p-checkbox [label]="answer" name="{{uuid}}" value="{{i}}" [(ngModel)]="questionAnswer"></p-checkbox>
+          <p-checkbox [label]="answer.name ?? ''" name="{{uuid}}" value="{{answer.index}}" [(ngModel)]="questionAnswer"
+          (onChange)="onAnswer($event)"></p-checkbox>
         </div>
       </div>
     </div>

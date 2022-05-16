@@ -26,7 +26,11 @@ public class TestsInfoProvider : ITestsInfoProvider
                 Name = q.QuestionName,
                 ExpectedAnswer = q.ExpectedAnswer,
                 Type = ParseQuestionType(q.QuestionType),
-                SelectableQuestionNames = q.SelectableAnswers
+                SelectableAnswers = q.SelectableAnswers?.Select(a => new SelectableAnswer
+                {
+                    Name = a.Name,
+                    Index = a.Index
+                })
             });
         
         await _testsService.Add(createTestModel.TestName!, questions, testCreatorName, createTestModel.AssignedStudentNames!);
@@ -112,10 +116,21 @@ public class TestsInfoProvider : ITestsInfoProvider
                 QuestionId = q.Id,
                 QuestionName = q.Name,
                 QuestionType = q.QuestionType,
-                SelectableQuestionNames = q.SelectableQuestionNames!.Select(a => a.Name)
+                SelectableQuestions = q.SelectableQuestionNames!.Select(a => new TakeSelectableAnswerModel
+                {
+                    Index = a.Index,
+                    Name = a.Name
+                })
             })
         };
 
         return testToTake;
+    }
+
+    public async Task AnswerTest(AnswerTestModel answerTestModel, string userName)
+    {
+        IEnumerable<(string testId, string questionAnswer)> questionAnswers =
+            answerTestModel.QuestionAnswers!.Select(qa => (qa.QuestionId, qa.Answer))!;
+        await _testsService.Answer(answerTestModel.TestId!, questionAnswers, userName);
     }
 }

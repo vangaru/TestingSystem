@@ -13,15 +13,21 @@
     <div *ngFor="let question of test?.questions" class="col-12">
       <div [ngSwitch]="question?.questionType">
         <div *ngSwitchCase="stringQuestionType">
-          <app-string-question [question]="question"></app-string-question>
+          <app-string-question [question]="question" (answer)="onAnswer($event)"></app-string-question>
         </div>
         <div *ngSwitchCase="checkboxQuestionType">
-          <app-checkbox-question [question]="question"></app-checkbox-question>
+          <app-checkbox-question [question]="question" (answer)="onAnswer($event)"></app-checkbox-question>
         </div>
         <div *ngSwitchCase="radiobuttonQuestionType">
-          <app-radiobutton-question [question]="question"></app-radiobutton-question>
+          <app-radiobutton-question [question]="question" (answer)="onAnswer($event)"></app-radiobutton-question>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="grid p-fluid">
+    <div class="col-12">
+      <button pButton type="submit" class="p-button-outlined p-button-success p-button-lg" label="Submit answer"
+              icon="pi pi-check" (click)="onSubmit()"></button>
     </div>
   </div>
 </div>

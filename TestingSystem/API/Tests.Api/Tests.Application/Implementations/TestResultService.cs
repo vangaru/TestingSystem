@@ -82,7 +82,7 @@ public class TestResultService : ITestResultService
     private int GetCorrectAnswersCount(IEnumerable<QuestionAnswer> questionAnswers)
     {
         return questionAnswers.Count(answer => 
-            !AnswerSkipped(answer) && AnswerCorrect(answer.Question!.ExpectedAnswer!, answer.ActualAnswer!));
+            !AnswerSkipped(answer) && AnswerCorrect(answer.Question!, answer.ActualAnswer!));
     }
 
     private bool AnswerSkipped(QuestionAnswer answer)
@@ -90,9 +90,34 @@ public class TestResultService : ITestResultService
         return answer.Question == null || answer.ActualAnswer == null;
     }
 
-    private bool AnswerCorrect(string expectedAnswer, string actualAnswer)
+    private bool AnswerCorrect(Tests.Domain.Models.Question question, string actualAnswer)
     {
-        return expectedAnswer.ToLower().Trim() == actualAnswer.ToLower().Trim();
+        if (question.ExpectedAnswer == null)
+        {
+            return false;
+        }
+
+        if (question.QuestionType == QuestionType.Checkbox.ToString())
+        {
+            string[] expectedAnswer = question.ExpectedAnswer.Split(',');
+            string[] answer = actualAnswer.Split(',');
+            if (answer.Length != expectedAnswer.Length)
+            {
+                return false;
+            }
+
+            foreach (string a in answer)
+            {
+                if (!expectedAnswer.Contains(a))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        
+        return question.ExpectedAnswer.ToLower().Trim() == actualAnswer.ToLower().Trim();
     }
 
     private double CalculateResults(int totalAnswersCount, int correctAnswersCount)

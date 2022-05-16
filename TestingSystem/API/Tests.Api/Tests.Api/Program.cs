@@ -54,7 +54,7 @@ builder.Services.AddControllers().AddJsonOptions(o =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ITokenProvider, TokenProvider>();
-builder.Services.AddTransient<IQuestionRepository, QuestionRepository>();
+builder.Services.AddTransient<IQuestionsRepository, QuestionsesRepository>();
 builder.Services.AddTransient<IQuestionAnswerRepository, QuestionAnswerRepository>();
 builder.Services.AddTransient<ITestsRepository, TestsRepository>();
 builder.Services.AddTransient<ITestResultRepository, TestResultRepository>();
